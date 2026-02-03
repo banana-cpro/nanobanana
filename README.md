@@ -50,6 +50,33 @@
 
 ---
 
+## 🛠️ 本地开发
+
+1. **安装依赖**:
+   ```bash
+   npm install
+   ```
+
+2. **启动开发服务器**:
+   ```bash
+   npm run dev
+   ```
+   前端开发服务器将在 `http://localhost:5173` 启动。
+
+3. **启动后端服务器** (在另一个终端):
+   ```bash
+   deno run --allow-net --allow-env --allow-read main.ts
+   ```
+   后端服务器将在 `http://localhost:8000` 启动。
+
+4. **构建生产版本**:
+   ```bash
+   npm run build
+   ```
+   构建后的文件将输出到 `static` 目录。
+
+---
+
 ## 🛠️ 如何使用
 
 1.  打开您部署后的 `*.deno.dev` URL。
@@ -68,7 +95,7 @@
 
 ## 💻 技术栈
 
--   **前端**: 原生 HTML, CSS, JavaScript (无框架)
+-   **前端**: Vue 3, Vite, Composition API
 -   **后端**: Deno, Deno Standard Library
 -   **AI 模型**:
     *   [魔搭 (ModelScope)](https://modelscope.cn/): `Qwen/Qwen-Image`, `MusePublic/FLUX.1` 等
