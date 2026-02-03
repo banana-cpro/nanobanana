@@ -6,7 +6,7 @@
   <div class="history-list">
     <div class="history-item active-history">
       <component :is="icons.Sparkles" class="icon-history" />
-      <span>2026-2-2</span>
+      <span>2026-2-3</span>
     </div>
   </div>
 </template>
