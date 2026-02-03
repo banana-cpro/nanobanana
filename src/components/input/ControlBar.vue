@@ -10,10 +10,6 @@
         <span>1张</span>
         <component :is="icons.ChevronDown" class="icon-xs" />
       </div>
-      <div class="dropdown-btn">
-        <span>尺寸选择(默认1:1)</span>
-        <component :is="icons.ChevronDown" class="icon-xs" />
-      </div>
     </div>
 
     <div class="actions-group">
@@ -21,15 +17,20 @@
         <component :is="icons.Trash2" class="icon-xs" />
         一键清空
       </button>
-      <button class="btn-start" @click="$emit('start')">
-        开始
-        <span class="cost">+ 20</span>
+      <button 
+        class="btn-start" 
+        @click="$emit('start')"
+        :disabled="loading"
+      >
+        {{ loading ? '生成中...' : '开始' }}
+        <span class="cost" v-if="!loading">+ 20</span>
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref, watch } from 'vue';
 import { Sparkles, ChevronDown, Trash2 } from 'lucide-vue-next';
 
 const icons = {
@@ -38,7 +39,35 @@ const icons = {
   Trash2
 };
 
-defineEmits(['clear', 'start']);
+const props = defineProps({
+  loading: {
+    type: Boolean,
+    default: false
+  },
+  progress: {
+    type: Number,
+    default: 0
+  },
+  aspectRatio: {
+    type: String,
+    default: 'auto'
+  }
+});
+
+const emit = defineEmits(['clear', 'start', 'update:aspectRatio']);
+
+const currentAspectRatio = ref(props.aspectRatio);
+
+// 同步外部传入的值
+watch(() => props.aspectRatio, (newVal) => {
+  currentAspectRatio.value = newVal;
+});
+
+
+// 处理宽高比变化
+const handleAspectRatioChange = (value) => {
+  emit('update:aspectRatio', value);
+};
 </script>
 
 <style scoped>
@@ -125,8 +154,13 @@ defineEmits(['clear', 'start']);
   transition: opacity 0.2s;
 }
 
-.btn-start:hover {
+.btn-start:hover:not(:disabled) {
   opacity: 0.9;
+}
+
+.btn-start:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .cost {
@@ -135,4 +169,39 @@ defineEmits(['clear', 'start']);
   border-radius: 4px;
   font-size: 11px;
 }
+
+/* Element Plus Select 样式覆盖 */
+:deep(.aspect-ratio-select) {
+  width: 100px;
+}
+
+:deep(.aspect-ratio-select .el-select__wrapper) {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid transparent !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  padding: 6px 12px !important;
+  min-height: auto !important;
+}
+
+:deep(.aspect-ratio-select .el-select__wrapper:hover) {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+:deep(.aspect-ratio-select .el-select__placeholder) {
+  color: var(--text-secondary) !important;
+  font-size: 12px !important;
+}
+
+:deep(.aspect-ratio-select .el-select__selected-item) {
+  color: var(--text-secondary) !important;
+  font-size: 12px !important;
+}
+
+:deep(.aspect-ratio-select .el-select__caret) {
+  color: var(--text-secondary) !important;
+  opacity: 0.6 !important;
+}
+
 </style>
