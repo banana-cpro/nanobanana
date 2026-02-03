@@ -4,11 +4,8 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
   plugins: [vue()],
   build: {
-    outDir: 'static',
-    emptyOutDir: false,
-    rollupOptions: {
-      input: './index.html'
-    }
+    outDir: 'dist',
+    emptyOutDir: true
   },
   server: {
     port: 5174,
